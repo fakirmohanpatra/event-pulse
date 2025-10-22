@@ -10,23 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping("/api/events")
 @RequiredArgsConstructor
 public class EventController {
 
     private final EventService eventService;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event, Authentication authentication) {
-        String username = authentication.getName();
-        Event created = eventService.createEvent(event, username);
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+        Event created = eventService.createEvent(event, "anonymous");
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable String id, @RequestBody Event event, Authentication authentication) {
-        String username = authentication.getName();
-        Event updated = eventService.updateEvent(id, event, username);
+    public ResponseEntity<Event> updateEvent(@PathVariable String id, @RequestBody Event event) {
+        Event updated = eventService.updateEvent(id, event, "anonymous");
         return ResponseEntity.ok(updated);
     }
 

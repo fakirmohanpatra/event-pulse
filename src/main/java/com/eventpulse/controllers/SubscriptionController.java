@@ -10,30 +10,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/subscriptions")
+@RequestMapping("/api/subscriptions")
 @RequiredArgsConstructor
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
     @PostMapping("/event/{eventId}")
-    public ResponseEntity<Subscription> subscribeToEvent(@PathVariable String eventId, Authentication authentication) {
-        String userId = authentication.getName(); // assuming username is id, or need to get user id
-        Subscription sub = subscriptionService.subscribeToEvent(userId, eventId);
+    public ResponseEntity<Subscription> subscribeToEvent(@PathVariable String eventId) {
+        Subscription sub = subscriptionService.subscribeToEvent("anonymous", eventId);
         return ResponseEntity.ok(sub);
     }
 
     @PostMapping("/category/{category}")
-    public ResponseEntity<Subscription> subscribeToCategory(@PathVariable String category, Authentication authentication) {
-        String userId = authentication.getName();
-        Subscription sub = subscriptionService.subscribeToCategory(userId, category);
+    public ResponseEntity<Subscription> subscribeToCategory(@PathVariable String category) {
+        Subscription sub = subscriptionService.subscribeToCategory("anonymous", category);
         return ResponseEntity.ok(sub);
     }
 
     @GetMapping
-    public ResponseEntity<List<Subscription>> getSubscriptions(Authentication authentication) {
-        String userId = authentication.getName();
-        List<Subscription> subs = subscriptionService.getUserSubscriptions(userId);
+    public ResponseEntity<List<Subscription>> getSubscriptions() {
+        List<Subscription> subs = subscriptionService.getUserSubscriptions("anonymous");
         return ResponseEntity.ok(subs);
     }
 
